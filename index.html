@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<head>
+    <script src="https://test.simply-easier-payments.com/PaymentApp/Payment/EmbeddedPayment.js"></script>
+</head>
+<body>
+    <form id="your-form" method="post" action="/">
+        <div id="payment-panel" ></div>
+        <button type="submit">Make Payment</button>
+</form>
+</body>
+<script type="text/javascript">
+    SEP.setup({
+           apiKey : "your_api_public_key",
+           mount : "payment-panel",
+           accessToken : "at_1-qUWJAIRVJlUok-IzaSxiF2dNZxq8K9YS4KHvHoui8VB19pro1DYIIlBx1kLI1B"
+    });
+   
+    var form = document.getElementById("your-form");
+    form.addEventListener("submit", function(event) {
+           event.preventDefault();
+
+           SEP.createToken(function(result) {
+                   if (result.errors) {
+                           console.error(result);
+                   } else {
+                           // Submit the token to your server.
+                           var hiddenInput = document.createElement('input');
+                           hiddenInput.setAttribute('type', 'hidden');
+                           hiddenInput.setAttribute('name', 'sepPaymentToken');
+                           hiddenInput.setAttribute('value', result.paymentToken.tokenString);
+                           form.appendChild(hiddenInput);
+                           form.submit();
+                   }
+           });
+    });
+</script>
+</html>
